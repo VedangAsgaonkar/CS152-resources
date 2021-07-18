@@ -1,0 +1,13 @@
+The game implements the priests and devils puzzle, in which all have to cross the river using a boat that carries only 2. Also on any side, at any time, the number of devils must
+not exceed the number of priests.
+The game is built by first extending the Fl_Widget class in Shape class. This is an abstract class that declares virtual functions refresh() and wipe().
+The MyRectangle class then inherits the Shape class and overrides the virtual methods. Also additional methods draw() and moveTo() are defined.
+The being class of which the priests and demons are instances, extends MyRectangle, so that these people can be given the basic body shape. It also
+has variables holding the current position of these beings. Also the class overrides handle() allowing the beings to climb into the boat. Priests are
+shown green and devils are red.
+Certain variables have been declared globally to provide ease of access.
+The window also has a go button that is an instance of the MyButton class that extendes Fl_Button. The handle() method of this class is the central 
+controller of the game. It makes the boat go from shore to shore. It also detects when the game is over due the number of devils being more on one
+shore than the number of priests. It can also detect wins. When either of this happens, it throws an integer. This causes all the variables declared
+in the try of main to go out of scope, killing the window. The exception is caught by catch, which according to the integer thrown prints a suitable
+result.

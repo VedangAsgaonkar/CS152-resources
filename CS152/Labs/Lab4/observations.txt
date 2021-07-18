@@ -1,0 +1,29 @@
+BASICS OF GUI
+GUI can be implemented using FLTK library. There is a window object inside which all components sit. The window remains in
+an infinite loop checking for events. As soon as an event occurs, the components respond using their handle() method. 
+
+OBJECT-OBJECT INTERACTION
+Two objects in a program may interact in the following ways:
+1) Each object has a pointer to the other object. To manipulate the other object, the pointer is dereferenced and functions 
+   are called.
+2) There is a wrapper object that holds pointers to all components. Each object also has a pointer to the wrapper. When it needs
+   to manipulate another object, it can ask the wrapper to do so using the pointer. The wrapper will execute the command using
+   its own set of pointers.
+
+The program involved each of the buttons manipulating its neighbours. Each button has a member bool isBlank. Now each button
+ stores the pointers to its neighbours. If the button is pushed, it will check through its set of pointers if any of its 
+neighbours isBlank. If so, it will use the pointer to exchange labels, set its neighbour's isBlank to true and its own
+isBlank to false.
+
+The current version lacks a shuffler. Shuffling has to be done manually.
+
+There are other ways to carry out the program:
+1) In the class, make a static pointer that points to the blank button. Also give each button a set of coordinates as members,
+   Thus this was when a button is clicked, you can check if the blank pointer points to a neighbour.
+   This teaches us that instead of forming unneccessary connections, create a connection only with the objects that are to be
+   manipulated. Also the manipulation can be conveyed to all instances using a static pointer. Infact this method can also be
+   used for instances of two different classes, by making them inherit from a class that contains such a static pointer.
+2) Use global variables. Discouraged.
+
+The later version has a shuffler that shuffles the blank space around. From it we learn how to make random integers in a given range.
+For example to make random numbers in 0 to 3 , use random()%4, to do from 10 to 14, do random()%5 + 10

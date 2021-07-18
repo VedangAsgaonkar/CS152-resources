@@ -1,0 +1,50 @@
+OBSERVATIONS:
+1)prog1.cpp
+	Class A is an abstract class since it has a purely virtual function f(). Function g() is also a virtual function but
+	has an implementation in A. B inherits from A and overrides both its functions. The creation of pointers of A, B is 
+	valid. But creating an object of A gives a compiler error.
+2)prog2.cpp
+	Class A is an abstract class since it has a purely virtual function f(). Function g() is also a virtual function but
+	has an implementation in A. B inherits from A and overrides both its functions. The creation of pointers of A, B is 
+	valid. B is not abstract so it can be instantiated. The pointer of A cannot be used to access methods of A, as no
+	object has been assigned. This throws a run-time error
+3)prog3.cpp
+	The pointer of A has been assigned address of an object of B. This leads to run-time polymorphism. 
+4)prog4.cpp
+	Class A is no longer abstract hence has been instantiated. The object of A can call methods defined inside A.
+5)prog5.cpp
+	The pointer of A has been assigned an address of instance of B. Also memory leak has occured as we did not delete the 
+	object of A from heap. The pointer can now show run-time polymorphism. Also object of B has been assigned to object 
+	of A. This produces a member variable wise copy of common members variables, both public and private variables get 
+	copied.
+6)prog6.cpp
+	Two classes B and C inherit from A. B overrides both virtual methods of A, C overrides only f(). Also C defines a new
+	method k(). The pointer of A is first pointing to an object of A. Thus it can use A::f and A::g. Then it points to an
+	object of B, displaying run-time polymorphism for f() and g(). Then it points to an object of C. It shows run-time
+	polymorphism only for f() as g() has not been overriden in C. Also it cannot access k() as the type of pointer is A*
+	and no k() is defined in A.
+7)prog7.cpp
+	ap->f() prints A::f and A::g . Then C::f, A::g and C::k are printed. Then runtime polymorphism is seen as C::f is 
+	printed. Then A::g is printed. Finally, runtime segmentation error occurs as no object is pointed to by the pointers
+	ap and bp.
+8)prog8.cpp
+	The program first prints C::f as the pointer of A implements run time polymorphism. It then prints B::g. This is 
+	because in run-time polymorphism, the last overriding of the virtual function is used.
+9)prog9.cpp
+	We note the calling of constructors of parent classes by child classes, with suitable parameters. We also note
+	run-time polymorphism
+10)prog10.cpp
+	We note the calling of constructors of parent classes by child classes, with suitable parameters. Also object of B has been assigned to object 
+	of A. This produces a member variable wise copy of common members variables, both public and private variables get 
+	copied.
+
+1)my1.cpp
+	The program displays normal characteristics of inheritance and run-time binding. However an important thing to note
+	is that the method A::h() when called by an object of C, or through the VTABLE of C due to run-time polymorphism,
+	it invokes C::f() and not A::f(). This shows operator overriding in action. Also even if h() was not virtual and
+	we did A* aptr= new C ; aptr->h(); still C::f() would be called inside h(). This is because when h() calls f(), it 
+	sees that f() is virtual and so uses the VTABLE of C and so calls C::f(). However if f() was not virtual then, 
+	A::f() would be called.
+2)my2.cpp
+	The program displays run-time binding using references. References are capable of showing similar run-time binding
+	as pointers.
