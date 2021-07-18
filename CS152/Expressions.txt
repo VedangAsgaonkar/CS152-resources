@@ -1,0 +1,89 @@
+Any language is made up of tokens. Tokens is a single entity ofcode. They come in following types:
+1)Keywords: reserved words which carry a special meaning
+2)Identifiers: names given to entities, like variables and methods. Identifier names have some constraints and cannot be
+  		keywords
+3)Literals: values i.e. rvalues, which can be assigned to a literal. For example: 1 , 'c' , "hi"
+4)Punctuators: they are symbols carrying special meaning. For example: . , ; 
+5)Operators: they operate on literals and identifiers and return values
+
+An expression is made of identifiers, literals and operators.
+
+OPERATORS:
+Operators come in the following types:
+	1)Unary:One operand
+	2)Binary:Two operands
+	3)Multiple:Multiple operands
+They are also classified as:
+	1)Prefix:Before the operand. Eg: !a
+	2)Infix:Between the operands. Eg: a+b, a[i] (treated as a[]i)
+	3)Suffic:After the operands. Eg: a++
+They are also classified as:
+	1)Arithematic: +,-,* etc
+	2)Relational: >,< etc
+	3)Logical: ||, && etc
+	4)Assignement: =, += etc
+	5)Bitwise: >> , << etc
+	6)Miscellanous: ?: (the conditional) , & (the address), * (the dereferencing), :: (scope resolution), sizeof etc.
+
+Associativity:
+	1) Left to right: A op B is same as : evaluate A , evaluate B ,  evaluate op 
+			 A op B op C is same as (A op B) op C
+	2) Right to left: A op B is same as : evaluate B , evaluate A ,  evaluate op
+			 A op B op C is same as A op (B op C)
+
+Precedence of operators:
+	There is an order of precedence of operators. The list is long, but here is a shortened version:
+		1) :: scope resolution
+		2) 
+
+In c++, we can overload operators. However, overloading is constraint to:
+1)Only predefined operators can be overloaded
+2)No change in airity( unary, binary etc.)
+3)Associativity and precedence cannot be changed. The compiler expects you to add similar kind of functionality.
+Overloading is a compile time polymorphism.
+
+Infact C++ has itself overloaded many operators. For example:
+int + int => int
+float + int => float
+etc.
+
+Overloading unary operators:
+1)Prefix:
+	class A{
+		public:
+		A operator-(){
+			A a ;
+			//some code
+			return a ;
+		}
+	};
+2)Postfix:
+
+
+Behaviour and implementation of some special operators:
+1) = operator: Associativity right to left. Pseudo code:
+	class A{
+		public:
+		A& operator=(A b){
+			//all public, private and protected member variables
+			return *this ;
+		}
+  Hence, the expression a=b=c is evaluated to a=(b=c). The A& returned allows such cascading.
+
+2) ++ operator: When used as prefix, it means, first increment, then return. ++x can behave both as lval and rval
+		When used as suffix, it means, first return, then increment. x++ can behave only as rval
+
+3) Function arguments ( , , ) operator: Generally arguments are read from right to left
+	
+
+Lvalue: an expression that can appear to the left of the assignement operator. It is capable of storing a value
+Rvalue: an expression that can appear to the right if the assignement operator. It is capable of returning a value
+For example:
+Valid : x+1 == 10
+	9 == 9
+Not valid: x+1 = 10
+	   9=9
+
+
+
+

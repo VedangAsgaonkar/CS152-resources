@@ -1,0 +1,76 @@
+It is possible that during inheritance, we wish that some child classes are not granted access to certain base 
+class features. This can be implemented using multiple inheritance. The common features can be implemented in a 
+common base class. The special features can be implemented in some other class( in C++) or an interface( in Java)
+and inherited. Thus multiple inheritance can give role-modelling
+
+There is also another possibility, in which we have an object with certain properties and we want to create two 
+different user interfaces for the object. In that case we equip the object with all its member variables, getter and
+setter methods. We instantiate the class in heap and make a pointer to it. Then we create two different classes for 
+each user interface for accessing the object. Each class has a private pointer to the object. Each interface also 
+has methods to call methods of the pointed object. Also the pointer that was originally used to create the object in
+heap is destroyed by ending its scope. Thus now the only way to interact with the object is through its two interfaces.
+
+Another possible way to restrict use of certain base functionality in some child classes, and provide it in other child 
+classes, is to hide inherited functionality:
+
+CHANGING ACCESS SPECIFIERS:
+While inheriting we use an access specifier, which converts all members with a less restrictive access specifier to that
+access specifier. Like:
+	class B : protected A
+However if we wish to alter the access specifier of a single member( cannot do that to a private member of the base class)
+of the base class in the subclass, we can use the following syntax:
+	class A{
+		protected:
+			void print(){
+			//some code
+			}
+	};
+	class B : public A{
+		public:
+		using A::print() ;
+	};
+This will make protected print() public in B.
+Similar syntax for variables.
+Consider the following example:
+	class A{
+		public:
+			void print(){
+			//some code
+			}
+	};
+	class B : public A{
+		private:
+		using A::print() ;
+	};
+Now instances of B cannot call print() or B::print(). However they can still call A::print(). This can be prevented by making print() protected in A.
+
+DELETING MEMBERS
+The subclass can choose to delete some base class members.
+	class A{
+		public:
+			void print(){
+			//some code
+			}
+	};
+	class B : public A{
+		void print() = delete;
+	};
+
+Note however that instances of B, can still call print() by calling A::print() as A's copy on print() is not deleted in B, only B::print() is deleted by B.
+This can be prevented by making print() protected in A.
+
+AN IMPORTANT EXAMPLE:
+class A has some methods that it's instances can use( and hence are public, so the technique shown above of making protected members of A can't be used). 
+Class B inherits from A. However there are certain methods of A, that we donot want instances of B to use, while other methods should be usable. 
+So we do the following:
+	class A{
+		public:
+		void f(){ //some code }
+		void g(){ //some code }
+	};
+	class B : private A{
+		public:
+		using A::f ;
+	};
+Thus now g is not accessible from instances of B as it is private due to the inheritance access specifier. But, f can be accessed by instances of B as f or
+B::f. They still cannot call A::f. This is because a copy of f has been created in B, B::f, which is public.

@@ -1,0 +1,39 @@
+Heap memory is a memory accessible throughout the program.
+
+ALLOCATION
+int* ptr;
+ptr = new int;
+double* arr;
+arr = new double[20] ;
+
+USAGE
+*ptr = 2 ;
+arr[0] = 3.14 ;
+arr[1] = -6.6 ;
+cout << arr[1] ;
+
+DELETION
+delete ptr; //deletes the heap location pointed to by ptr
+delete[] arr; //deletes the array whose first byte is pointed by arr
+
+PRECAUTIONS:
+Care has to be taken to delete the heap memory after use. Also we must take care that the pointer that points to it
+doesn't go out of scope, because although the heap is globally accessible, its pointer is local. So copy the pointer 
+out by return/ reference etc. before it goes out of scope.
+
+USAGE:
+It is particulary useful to create objects storing variable length arrays. The object possesses a member pointer. The pointer
+is made to point to a heap array in the constructor, and the length can be passed as an argument to the constructor.
+
+AN IMPORTANT FACT:
+Using pointers we can access non-heap i.e. activation frame variables also, unless they are destroyed due to their scope ending.
+This means, a non-heap variable made in main or in a function can be used in any other function for which the activation frame
+of main or the prior function isn't destroyed, by using its pointer. However a local variable is made in a function and its 
+address is returned to main, then dereferencing the address will lead to a segmentation fault as the activation frame is destroyed
+and so the value doesn't exist anymore.
+A reference is just an alias for the object. Hence, we can have references to objects in other activation frames, as long as they
+don't get destroyed.
+Also another important tool to create an array slice in c++. For example to slice an array from and after index 2, we can do:
+int arr[100] ;
+//initialize
+int* arr2 = &arr[2];

@@ -1,0 +1,25 @@
+#include<cstdlib>
+Now we can allocate and de-allocate heap memory dynamically.
+
+1)Allocating a pointer of type int* to point to 
+	int* ptr = (int*)malloc(100*sizeof(int));
+It initializes each memory block with garbage
+Memory can be accessed like ptr[2]
+
+2)Allocating contigiuous memory
+	int* ptr = (int*)calloc(100,sizeof(int));
+It initializes each memory block with 0
+Memory can be accessed like ptr[2]
+
+3)Deallocating memory
+	free(ptr)
+
+4)Reallocating memory
+	ptr = realloc(ptr , newSize )
+  It copies existing values
+  If newSize is more than initial array size, the remaining is
+  filled with garbage. If it is less, the part of data outside 
+  is lost.
+
+
+

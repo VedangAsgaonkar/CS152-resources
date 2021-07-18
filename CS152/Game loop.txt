@@ -1,0 +1,35 @@
+Any game is written as an infinite while loop, while(true)
+An event class has to be defined.
+All the variables are declared outside this loop. The loop contains a check() method 
+that is capable of checking for event occurance. It also has a wait() method, in case 
+we need to wait for events. It may also have interupts to check for events. It is 
+also capable of a break statement when the game ends.
+The loop may also implement the aspect of time in the game, by keeping track of number 
+of iterations performed and declaring time elapsed in the game to be proportional to
+this number.
+
+The objects invloved in the game generally have a handle() method for specific kinds of
+events. They are subscribed to the event listener. When a suitable event occurs, the 
+virtual methods handle() will be called and the event will be handled.
+
+Object object interaction may be carried out by giving objects pointers to each other or
+information may be shared using static/global variables. Another common way to handle a 
+large number of objects is to have a wrapper that hold pointers to all of them and mediates
+their interaction. 
+
+Time dependency can also be implemented using a Timer that makes use of callbacks. The callback
+function performs the suitable task and then again creates a new timer with the callback being
+passed into it.
+
+Also switch statements are very useful in Game loops. Note that if we do not break in switch
+it will cause a fall through. This can also be used to our advantage to implement or in a  
+switch. For example, if we want to do the same statement for x=1 and x=2 in a switch, we
+can do
+switch(x){
+	case 1:
+	case 2: //some code
+		break;
+	//other cases and default
+}
+Also switch can compare ranges if we can get modulo a suitable number.
+Also the cases of a switch have to be constants or const variables.

@@ -1,0 +1,140 @@
+File input and output is controlled by the fstream library. So in the preamble write:
+	#include<fstream>
+	using namespace std ;
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+READING FROM FILES:
+To input we will create an fstream object as follows:
+	fstream file_in ;
+	file_in.open( "Myfile.txt" , ios::in ) ;
+
+The fstream object has a pointer that points to a data member. When created, it points to a C++ defined data member called bof i.e. beginning of file. 
+To read data, we write:
+	int x ;
+	file_in >> x ;
+The operator>> on the fstream object first takes its pointer to the next data element and then reads the data from it into the right hand operand.
+Each data member in the file is seperated by a whitespace i.e. a space or tab or newline . To read an entire line, write std::getline( file_in , str )
+where str is a sufficiently large char array.
+At the end of the file C++ defines another data member called eof i.e. end of file.
+Now suppose the fstream pointer is at the last data element in the file. If now we do a file_in >> x ; the pointer will attempt to move to the 
+next member and store it in x . But there is no next member. Hence the pointer remains stuck at the last member, doesn't move ahead. It then 
+puts the member it is pointing to i.e. the last member into x. Also whenever such a thing happens, an internal private boolean variable in 
+file_in object turns true, indicating that the end of file was encountered. The value of this variable can be checked using file_in.eof() 
+method.
+
+The following examples are instructive:
+Assume the code in each of the examples:
+	fstream file_in ;
+	file_in.open( "Myfile.txt" , ios::in ) ;
+And the data file Myfile.txt as :
+	1
+	2
+
+Then:
+
+1)	while(!file_in.eof()){
+		int x ;
+		file_in >> x ;
+		cout << x << endl ;
+	}
+
+  Prints:
+  1
+  2
+  2
+
+  Steps:
+  file_in.eof() == false
+  pointer pointing to bof 
+  pointer points moves forward, points to 1, reads 1, prints 1
+  file_in.eof() == false
+  pointer points moves forward, points to 2, reads 2, prints 2
+  file_in.eof() == false
+  pointer fails to move forward, sets file_in.eof() to true, points to 2, reads 2, prints 2
+  file_in.eof() == true, loop terminates
+
+2)	int x ;
+	file_in >> x;
+	while(!file_in.eof()){
+		cout << x << endl ;
+		file_in >> x ;
+	}
+
+  Prints:
+  1
+  2
+
+  Steps:
+  pointer pointing to bof
+  pointer moves forward, points to 1, reads 1
+  file_in.eof() == false
+  prints 1
+  pointer moves forward, points to 2, reads 2
+  file_in.eof() == false
+  prints 2
+  pointer fails to move forward, sets file_in.eof() to true, points to 2, reads 2
+  file_in.eof() == true, loop terminates
+
+After we are done reading we should close the file
+	file_in.close();
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+OVERWRITING FILES:
+To over write we will create an fstream object as follows:
+	fstream file_out ;
+	file_out.open( "Myfile.txt" , ios::out ) ;
+The existing content of the file gets cleared as soon as this statement is issued.
+Now we can write into the file using 
+	file_out << " " << "Hi" << endl ; 
+etc. It is always recommended to have whitespace characters before and after the data element if we want to read the file again.
+After usage, close the file:
+	file_out.close();
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+
+APPENDING TO FILES:
+To append to a file i.e. add data at its end, use:
+	fstream file_out ;
+	file_out.open( "Myfile.txt" , ios::app ) ;
+The pointer now starts after the existing data on a new line.
+We can now append like:
+	file_out << "Hi" <<endl ;
+etc.
+After usage, close the file:
+	file_out.close();
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+
+INPUT AND OUTPUT
+We can read and write with the same fstream instance. This can be done as:
+	fstream file ;
+	file.open( "Myfile.txt" , ios::in | ios::out ) ;
+This will open the file, with the pointer at bof. 
+Every file has all its characters indexed starting from 1 for the first character. Here character includes space, tab(\t) and newline(\n) 
+and these are also a part of the indexing. When the pointer is at some particular character the following happen: 
+1) If file >> is used, the pointer will shift to the next data element after the current character position. Note here that it moves to the next 
+   data element and not to the next character. This means it skips over spaces, tabs and newlines. Then it will read in that data element 
+   i.e. the whole contagious block after the whitespace till the next whitespace. The pointer will then be placed at the last character of the
+   data element that was read.
+2) If file << is used, the pointer shifts to the next character( which includes space, /t , /n). It will then overwrite that character with the 
+   first character of the string( it may be a number, but automatic conversion to string) being written. If the string has more than one characters,
+   it will move to the next character, overwrite it with the string's next character and so on till it has written the whole string. It will then 
+   rest, with the pointer waiting at the last character of the newly written string. If we are at the last character of the file and << is used,
+   a new character would be added at the end and written into.
+
+We can also move the pointer to any position at will. This is done by using seekg() or seekp() methods. The former is meant to move
+input pointer and latter the output pointer, but since fstream has only one pointer, they can be used interchangeably. For example:
+	seekp( 2 , ios::cur ) or seekg( 2 , ios::cur ) //Move two characters (and not data elements) ahead of current
+	seekp( -2, ios::cur ) or seekg( -2, ios::cur ) //Move two characters (and not data elements) behind of current
+	seekp( 1 , ios::beg ) or seekg( 1 , ios::beg )//Move to one characters (and not data elements) after bof
+	seekp( -1, ios::end ) or seekg( -1, ios::end ) //Move to one characters (and not data elements) behind eof
+
+Be careful in their use as >> , << themselves shift the pointer one step ahead before performing action.

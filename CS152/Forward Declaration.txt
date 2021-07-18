@@ -1,0 +1,31 @@
+https://www.geeksforgeeks.org/what-are-forward-declarations-in-c/
+
+The following format is useful:
+
+	//Forward declare all classes
+	class A ;
+	class B;
+
+	//Define all the classes with their member variables. Inside classes forward declare all member functions
+	class A{
+		private:
+		int x ;
+		public:
+		int f();
+	};
+	class B{
+		private:
+		char y ;
+		public:
+		bool g();
+	};
+
+	//Define all member functions
+	int A::f(){
+		cout << "f" << endl ;
+	}
+	bool B::g(){
+		cout<< "g" << endl ;
+	}
+
+The first two parts may also be placed in a seperate header file and it can be included in the main file having the third part.

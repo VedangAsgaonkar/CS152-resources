@@ -1,0 +1,49 @@
+How to connect Objects to make a system:
+If we have a one way connection from object A to object B, that is A can control properties of B, then give A a pointer to B.
+For a two way connection, make two one way connections.
+
+OBJECT-OBJECT INTERACTION
+Two objects in a program may interact in the following ways:
+1) Each object has a pointer to the other object. To manipulate the other object, the pointer is dereferenced and functions 
+   are called.
+2) There is a wrapper object that holds pointers to all components. Each object also has a pointer to the wrapper. When it needs
+   to manipulate another object, it can ask the wrapper to do so using the pointer. The wrapper will execute the command using
+   its own set of pointers.
+3) The class can contain static members, shared by all its instances.
+
+Thus we can prepare trees, chains, graphs and a lot of structures using these pointer based connections.
+
+Thus the connections can be of two types:
+
+1) One to one connections: This is implemented either using pointers or wrappers. Data can be shared by using setter methods of
+   the dereferenced pointer and behaviour can be commanded by calling its modifier methods.
+
+2) Broadcasting : Broadcasting involves sending a message to a large number of objects. If the message is data, this can be 
+   implemented using static variables ( possibly of a superclass designed specifically for that reason ) or by giving all objects 
+   a pointer to a single heap location. To command behaviour, the signal must reach all objects and they may react to it in possibly
+   different ways. This may be implemented as follows:
+
+	a)All the classes that want the broadcast will inherit from a common class say Listener. The Listener class also has a purely
+	 virtual function handle() meant to handle broadcasted commands. 
+
+	b)The class that needs to broadcast say Broadcaster has a Listener** member. In its constructor the upper limit on number
+	 of listeners to the broadcast is specified say n . The the constructor assigns heap memory
+		Listener** subscriberList = new Listener*[n] ;
+	An object of this class is created for broadcasting.
+
+	c)Broadcaster has a int subscribe(Listener* lptr) method that appends lptr into the array in heap and returns the array index
+	 for that pointer. It also has a bool unsubscribe(int index) method that deletes the pointer at index index and pushes the 
+	 array forward to be continuous.
+
+	d)The Listener class has an int member say index and a pointer to the broadcaster object say bcptr. The constructor of Listener 
+	 carries out the following:
+		int index = bcptr->subscribe(this )
+	The destructor must also explicitly unsubscribe. This can be done as 
+		bcptr->unsubscribe(index)		
+
+	e)Every class that listens to the base class must inherit Listener and call its constructor and destructor in its own constructor 
+	and destructor. It can also override the handle() method to its own needs. This will also allow for run-time binding as the pointers
+	of type Listener are pointing to objects of child types. Beware that the broadcaster can only call the handle method of these. 
+	
+	f)The Broadcaster class has a void broadcast() method that will call handle on all the dereferenced pointers in its subscriberList.
+	 

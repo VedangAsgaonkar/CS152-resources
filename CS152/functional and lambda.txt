@@ -1,0 +1,27 @@
+https://www.tutorialspoint.com/cpp_standard_library/functional.htm
+https://www.geeksforgeeks.org/lambda-expression-in-c/
+
+A higher order function is a function that accepts one or more functions as input and may/may not return a function as output.
+Python:
+
+Higher order function:
+
+	def func(g,l):
+		return g(l) 
+
+	def sum(l):
+		s=0
+		for i in l:
+			s+=i
+		return s
+
+	print(func(sum,[1,2,3]))
+
+
+Lambda: An anonymous function is called lambda
+
+Eg:
+	lambda x : x*x 
+	lambda x : x+y 
+	lambda x : x*x if(x>0) else x+x 
+	lambda x,y: x*y if(x>0) else ( x+y if(y>0) else x-y ) 

@@ -1,0 +1,106 @@
+TRY CATCH STATEMENTS:
+The block of code written in the try is executed. If it faces some exception, the control immediately moves to catch. There are certain standard exception classes like std::bad_alloc,
+std::domain_error. All these inherit from the superclass std::exception. For example:
+	try{
+		//some code
+	}
+	catch(std::domain_error& e){
+		cout<< e.what() <<endl ; //prints "std::domain_error". We could also print some custom message like "it is a domain error"
+	}
+	catch(std::bad_alloc& e){
+		//some code
+	}
+To catch all standard exceptions we can just use std::exception& e . The try will give an error object of any one exception subclass and it will be stored in the std::exception reference.
+The what() method is virtual so will show run-time binding and so e.what() will give whatever exception has occured.
+
+THROW STATEMENT:
+We can have our own errors using throw. For example:
+	try{
+	int A ; 
+	//some code and condition on A . Under some condition
+	throw A ;
+	}
+	catch(int& x){
+	//this catch works if try throws an int. Since the A is an int, it catches
+	cout << "Some error with " << x << endl ;
+	}
+
+This is particularly useful in functions to check if preconditions are sattisfied. Example:
+	
+	double divide(double x , double y){
+		if(abs(y) < 1e-7){
+			throw "Divide by zero" ;
+		}
+		else{
+			return x/y ;
+		}
+	}
+	int main(){
+		double a , b ;
+		try{
+			cout<< divide(a,b) ;
+		}
+		catch(const char* str){
+			cout << str ;
+		}
+	}
+
+We can also create our own exception classes. Example:
+	class myException : public exception{
+		public:
+		const char* what() const throw(){
+			cout<< "This is my exception"
+		}
+	};
+
+	myException myExceptionObject;
+
+Now we can make our try statements throw an object myExceptionObject of myException and make catch(myException& e).
+
+We could also make exception classes that don't extend std::exception
+
+	class ArrayIndexOutOfBound{
+		private:
+		int x ;
+		public:
+		ArrayIndexOutOfBound( int y ){
+			x = y ;
+		}
+		void msg(){
+			std::cout << "Array underflow" << std::endl;
+			std::cout << "Array overflow" << std::endl ;
+		}
+	};
+
+Now an object of this can be created, thrown and caught( as reference ) wherever needed.
+
+A general catch that catches any exception is written as catch(...)
+
+The throw can also be used as a goto
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+ASSERT
+To write assertion in C, we write #include<assert.h> , in C++ we write #include<cassert>
+The statements are implemented in run-time.
+The statement
+	assert( condition );
+is used to enforce pre and post conditions in functions etc.
+If the condition is true, the program continues, if it false, the program terminates. It is more like an enforcer. There are better ways to handle failed pre and post
+conditions using exceptions or if-else.
+Assertions are generally used to prove/ demonstrate correctness and to show certain conditions are true to the reader of code. It also makes sure that the program
+does not fail due to a modification made to the code that disregards other parts of the code.
+It may seem redundant in small programs, but in larger programs, in the development phase, mistakes may happen and to ensure that preconditions, postconditions 
+and invariants are enforced, we use asserts.
+Also assertions may be used to demonstrate certain class invariants or enforced limits of a certain variable. Thus these assertions have to be made in constructors, 
+destructors and all methods at the beginning and at the end. They can also assert loop invariants. They can also be used to verify if a process has worked properly
+i.e. making a correctness post-condition.
+Sometimes we may:
+	#define require assert
+	#define ensure assert
+This makes two macros, making the code more readable. We will use require to check pre and and ensure to check post conditions.
+Two or more assertions may be combined using logical operators. However this reduces specificity.
+Assertions are useful during development and testing. They may be turned off with a #define NDEBUG ( before #include<cassert> ) or passing it as -DNDEBUG . Note here 
+that you need not explicitly write the #ifndef NDEBUG and #endif. It is implemented by default around every assert statement.
+
+
