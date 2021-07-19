@@ -1,0 +1,7 @@
+Observations:
+1)path.pl:	The original version of the code gives all correct paths, but after that it goes into infinite recursion.
+	The reason is that it keeps searching for paths and keeps calling the last clause. The code has been changed to check for edges
+	preventing this infinite recursion. 
+2)reward.pl: The original program shows multiple solutions to the same query. After introduction of ! the backtracking is stopped after
+	one solution has been detected.
+3)sibling.pl: Again the use of cut(!) is seen. 

@@ -1,0 +1,5 @@
+Problem 1:
+Memoization is observed to greatly reduce the depth of recursion. In some cases where memoization has not been used, it leads to maximum recursion depth exceeded.
+It also reduces time-complexity by avoiding repeated calculation.
+Problem 2:
+Use of 1D amd 2D recursion is seen. Recursive solutions are much more concise as compared to iterative ones.
