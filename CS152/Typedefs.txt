@@ -1,0 +1,9 @@
+A typedef is an alias for a existing data type. It is used to provide more readability and avoid long data type names. The new data type behaves exactly like the old
+one. The old one can of course also be used. For example:
+	typedef int color ;
+	typedef std::vector<std::string> sentence ;
+They can now be used as 
+	color a = 1 ;
+	sentence b;
+	b.append("The") ;
+The typedef is just an alias, and there is an implicit casting between the two types.

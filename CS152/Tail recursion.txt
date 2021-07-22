@@ -1,0 +1,59 @@
+The compiler maintains function activation frames as a stack. At the bottom of the stack is main(). 
+Any function when it gets called is an activation frame is added at the top of the stack, and when it returns or terminates,
+it is popped from the stack.
+Thus consider the following:
+   int fact( int n ){
+	return n == 1 ? 1 : n*fact(n-1) ;
+   }
+   int main(){
+	int x = fact(4) ;
+   }
+
+  Internally the compiler performs the following:
+	1) Activation frame main() created
+	2) Activation frame fact(4) created
+	3) Activation frame fact(3) created
+	4) Activation frame fact(2) created
+	5) Activation frame fact(1) created
+	6) fact(1) returns 1 to fact(2) and is popped
+	7) fact(2) returns 2 to fact(3) and is popped
+	8) fact(3) returns 6 to fact(4) and is popped
+	9) fact(4) returns 24 to main() and is popped
+	10) main() returns 0 and is popped
+
+Now, the algorithm has to maintain 5 activation frames at its peak, thus consuming lot of memory. Instead, we can use tail recursion
+  int fact( int n , int p ){
+	if(n==1){
+		return p ;
+	}
+	else{
+		return fact(n-1,p*n);
+	}
+   }
+  int main(){
+	int x = fact(4,1) ;
+   }
+
+Internally the compiler would have performed the following:
+	1) Activation frame main() created
+	2) Activation frame fact(4,1) created
+	3) Activation frame fact(3,4) created
+	4) Activation frame fact(2,12) created
+	5) Activation frame fact(1,24) created
+	6) fact(1,24) returns 24 to fact(2,12) and is popped
+	7) fact(2,12) returns 24 to fact(3,4) and is popped
+	8) fact(3,4) returns 24 to fact(4,1) and is popped
+	9) fact(4,1) returns 24 to main() and is popped
+	10) main() returns 0 and is popped
+
+But the compiler optimizes this. It doesn't need to store the intermediate activation frames as the return calls are directly chained together.
+	1) Activation frame main() created
+	2) Activation frame fact(4,1) created
+	3) Activation frame fact(3,4) created and fact(4,1) and is popped
+	4) Activation frame fact(2,12) created and fact(3,4) and is popped
+	5) Activation frame fact(1,24) created and fact(2,12) and is popped
+	6) fact(1,24) returns 24 to main() and is popped
+	7) main() returns 0 and is popped
+
+
+

@@ -1,0 +1,192 @@
+The keyword: virtual
+The function is declared virtual meaning that it is not being given a body right now. It will be implemented in a derived
+(inheriting) class. So same as Java's abstract method. Classes defined with a virtual function cannot be instatiated, they can 
+only be inherited. But you can define a pointer to an abstract class, although you cannot allocate it to heap or create an object
+whose address it stores. But such a pointer can also be used to point to an instance of a derived class. 
+
+https://www.geeksforgeeks.org/virtual-function-cpp/
+https://www.geeksforgeeks.org/virtual-functions-and-runtime-polymorphism-in-c-set-1-introduction/
+https://www.geeksforgeeks.org/g-fact-43/
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+
+INHERITANCE:
+Inheritance shows an is-a relationship. So if classB inherits from class A, it means B is a A, like car is a vehicle.
+( There are hierarchies other than is-a hierarchies also. Like part-of hierarchy. Example : country is part-of continent. 
+  Such relationships are not depicted by inheritance as the child neednot have properties of parent. Rather they are 
+  depicted using pointer based trees). The base class is a generalization, the derived classes are specializations.
+A classification tree depicts this relationship. Every class has some specification which apply to all its successors.
+In c++ inheritance is done using the : operator
+	class B : public A
+the keyword public means that all the public/protected/private members of A are public/protected/private in B
+If instead we write protected, then the public members of A become protected in B
+If we write private, then all members of A are private in B
+
+Now suppose we have class B : public A. So now objects of B can call public and protected members of A. Also private members
+of A can only be called through public/protected methods of A, not by methods of B.
+
+Variable Shadowing: If there is a variable in B having same name and data type as A, then inside B or objects of B, writing
+the name of that variable means the variable of B. To call the variable of A, use A::variable name.
+
+Method Overriding: If there is a method in B with same prototype as a method of A, then inside B or Objects of B, writing the 
+method name means the method of B. To call the method of A, use A::method name. Methods declared final cannot be overriden.
+
+C++ supports multiple inheritance, so you can write
+	class B : public A , public C 
+
+In this there may arise an ambiguity if both A and C inherit from a common class D. Then members of D come twice in B and must
+be accessed as A::d and C::d where d is the name of the member. 
+This complication may be avoided if when A and C inherit D we write
+	class A : virtual public D  and similarly for C
+this way B gets only one copy of d which can be called directly by name.
+Also note that whenever the constructor of a class is called, the constructor of its base class is called first. This happens
+by default but it is a good practice to write it like:
+	class A{
+		public:
+		A(){
+		}
+	};
+	class B : public A{
+		public:
+		B() : A(){
+		}
+	};
+
+If this is not written the default constructor of A will be called. To call non default constructors we can write:
+
+	class A{
+		public:
+		A(int x , int s){
+		//something
+		}
+	};
+	class B : public A{
+		private:
+		int y ;
+		public:
+		B(int z) : A(y,s){
+		//something
+		}
+	};
+
+Also, a class declared final cannot be inherited.
+
+Note that if B inherits from A, and let x be some public/protected member of A. As long as B does not overshadow/ override/
+change access specifier/ delete x, for an object of B, there is only one copy of x, A::x and B::x are the same copy in an 
+object.
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+
+VIRTUAL:
+The virtual keyword is used in front of names of functions. 
+class A{
+	public:
+	virtual void f(){ cout << "fA" ; }
+	void g(){ cout << "gA" ;}
+};
+class B : public A {
+	public:
+	void f(){ cout << "fB" ; } //or virtual void f() was also fine
+	void g(){ cout << "gB" ; } //or virtual void g() was also fine
+};
+
+Now Objects/Pointers/References of A will call fA , gA . Objects/Pointers/References of B will call fB, gB unless 
+they are explicitely told to call those of A by writing A::f() or A::g().
+
+However if a pointer or reference of A is assigned an address or variable of B, then for the virtual function f() , the function
+fB is called, but for g(), gA is called as normal. Also the pointer cannot call member functions defined in the sub-class that
+are not defined in the super-class.
+
+Also we can have virtual functions written as : virtual void func() = 0 ;
+This means you are making the virtual function nil, and the class cannot be instantiated now.
+
+AN IMPORTANT EXAMPLE:
+Suppose we have an abstract class which cannot be instantiated with the name myClass. We can still make a pointer of it
+	myClass* ptr ;
+Suppose the class has a method defined myFunc() and suppose ptr hasn't been made to point to any object. Then:
+	ptr->myFunc(); //run time error
+	ptr.myFunc(); //compiler error
+
+ANOTHER IMPORTANT EXAMPLE:
+class B1{
+    public :
+        virtual void f() = 0;
+};
+
+class B2{
+    public :
+        virtual void g() = 0;
+};
+
+class D : public B1, public B2{
+    public:
+        void f(){
+            cout << "f" ;
+        }
+        void g(){
+            cout << "g" ;
+        }
+	void h(){
+	    cout << "h" ;
+	}
+};
+
+int main(){
+    B1* ptr = new D ;
+    ptr->f(); //works. dynamic binding.
+    ptr->g(); //error
+    ptr->h(); //error
+}
+
+
+The ptr of B1 is able to access methods from the VTABLE of child class if and only if the method is virtual in B1.
+
+MULTILEVEL INHERITANCE AND VIRTUAL
+In case of multi level inheritance and run-time binding, we have the last definition of the function used. 
+
+ONE MORE IMPORTANT EXAMPLE:
+
+class A{
+	public:
+	virtual void f(){ cout << "A::f" ; }
+	void g(){ cout << "A::g" ; }
+	void h(){ f(); g(); }
+};
+
+class B : public A{
+	public:
+	virtual void f(){ cout << "B::f" ; }
+	void g(){ cout << "B::g" ; }
+};
+
+Now, consider the following:
+
+1)	A a ;
+	a.h();
+  This calls A::f and A::g
+
+2)	B b ;
+	b.h();
+  This calls B::f and A::g
+
+3)	A* aptr = new B;
+	aptr->h();
+  This calls B::f and A::g 
+
+Explaination: 
+When h() is called, it calls f() and g(). Since g() is not virtual, it has been bound to h() at compile time,
+meaning, that while compiling class A, the compiler has made note that A::h() will call A::g(). However f() is virtual, so it is 
+bound at run-time. Thus when A::h() calls f(), the program at run time will first look for A::f(). Since this is virtual, it is asked
+to go as far down the inheritance hierarchy as in context and call the last definition of f().
+Hence when h() is called by any means, it will surely call A::g() as the two have been bound together while compiling class A itself.
+However when h() calls f(), it will see the most overriding version of f() in context. Thus, it will call A::f() when called by an 
+object of A as there only A is in context. But through an object of B or pointer of A pointing to an object of B, B is also in 
+context. So B::f() will be called.
+
+Note: void* is a universal pointer type. However you cannot use -> with it. It must be casted to a suitable type before using ->

@@ -1,0 +1,45 @@
+OBJECT ORIENTATION:
+All important entities must be represented as objects
+
+SINGLE ENTRY SINGLE EXIT:
+It is possible to carry out unconditional jumps in a program so that the control jumps 
+between blocks. For example:
+1)goto (deprecated):
+	{ // a block of code 
+	//some condition to carry out a jump
+	goto a ;
+	}
+	
+	{//another block
+	//some code
+	a:
+	//some code
+	}
+
+2)Throwing exceptions. Can be used to jump from some class method to some part of main
+	class myClass{
+		public:
+		void someMethod(){
+			//some code
+			//some condition
+			int a = 1;
+			throw a ;
+		}
+	};
+
+	int main(){
+		//some code
+		try{
+		//some code 
+		}	
+		catch( int x ){
+		//the throw from someMethod() redirects here
+		//some code
+		}
+	}
+
+However we should ideally not do these things. Instead we should use methods to do the job.
+Make a method storing whatever code was supposed to be jumped to, and call that method 
+under some condition, wherever we feel like making a jump to that code. This may
+however have issues with scope of variables, which needs to be dealt suitably using 
+global/ heap/ pointers/ references.

@@ -1,0 +1,51 @@
+STATIC VARIABLES IN METHODS:
+Static varaibles in functions are created as only when the method is called first time, and then subsequent uses 
+of the method use this variable only, with its updates intact.( Not allowed in Java)
+
+STATIC VARIABLES IN CLASSES:
+There is only one copy of the static variable belonging to all the instances of the class. So this facilitates
+interaction between instances of a class.
+The static members cannot be changed in a constructor.
+They are called as follows:
+	C++: They can be called by each object as objectname.member name or classname::member
+
+INITIALIZING STATIC VARIABLES:
+class A{
+	private:
+		static int a ;
+}
+int A::a = 1 ;
+
+Follow this format strictly( except the private can be changed to public etc.). Donot attempt to initialize in constructor/
+methods. Note however that constructor/ methods can change the value once initialized like this.
+
+STATIC METHODS IN CLASSES:
+Static methods also belong to the class. Their body cannot call non-static methods or non-static members.
+	C++: They can be called as classname::method()
+	Java: They can be called as classname.method()
+
+Static used in constructors and destructors can keep a track of number of instances made.
+
+AN IMPORTANT EXAMPLE:
+A class can have a static list that stores the pointers of all its instantiated objects.
+
+class MyClass{
+	private:
+
+	static MyClass** list ;
+	static int numObj ;
+	int index ;
+	
+	public:
+	MyClass(){
+		index = list.append(this) ; // define a suitable append for the array
+		numObj++ ;	
+	}
+	~MyClass(){
+		list.delete(index); //and a suitable delete.
+		numObj--;
+	}
+};
+
+MyClass** MyClass::list = new MyClass*[256] ; //Lets say atmost 256 objects are made
+int MyClass:numObj = 0 ;

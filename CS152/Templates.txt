@@ -1,0 +1,67 @@
+Templates are created when we want some functionality to span all data types.
+1)TEMPLATE FUNCTIONS:
+  We can create functions that work on any data type. While using, we tell the data type. Example:
+
+	template< class T > //T is a representative name for all possible classes that will be passed to the template in the < > while using
+	T myTemp( T x , T y){ 
+
+	/*the return type can be anything. For example it can be int and we can return sizeof(T). Similarly the arguments may be of any type and neednot even have type T inside them.
+	  For example we can take in int n and return n*sizeof(T) 
+	*/
+
+		return max(x , y );
+	}
+
+	int main(){
+		cout << myTemp<int>(3 , 5) ; //prints 5
+		cout << myTemp<double>(2.3,3.2) ;//prints 3.2
+	}
+
+
+2)TEMPLATE CLASSES:
+  We can have template classes, where-in we want some variables to have a variable type. For example:
+	
+	template< class T >//T is a representative name for all possible classes that will be passed to the template in the < > while using
+	class myArray{
+		private:
+		T* ptr ;
+		public:
+		myArray(int n){
+			ptr = new T[n];
+		}
+	};
+
+	int main(){
+		myArray<int> a(2) ;
+		myArray<double> b(3);
+	}
+	
+
+In templates multiple generic types can also be used like template< class T1 , class T2 >. In this case while instantiating we just write <int,bool> etc. Just like default arguments
+to functions, we can also have default in templates like template< class T1, class T2 = char >. 
+If a static variable/method is used in a template class each different template will have different copy and same template single copy. So
+	myTempClass<int> a ;
+	myTempClass<int> b ;
+	myTempClass<float> c ;
+a, b will have same static variable copy. c will have a different copy.
+
+TEMPLATE SPECIALIZATION:
+We may want the template to be general excluding a few data types. This is called specialization. Example:
+
+	template< class T >
+	void myFunc( T x ){
+	//some code
+	}
+	template<>
+	void myFunc(int x){
+	//some code
+	}
+
+Now calling myFunc<double> or myFunc<char*> will call the first method, only for myFunc<int> second method is called.
+		
+
+
+
+
+
+	

@@ -1,0 +1,11 @@
+lang: dart
+
+It is useful to put try catch in case of libraries that depend on user's device or user granting permission.
+Eg:
+
+try{
+// get position
+}
+catch(e){
+// handle
+}
