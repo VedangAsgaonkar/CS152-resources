@@ -1,0 +1,28 @@
+Objects may be related to each other as:
+1)Composition( has-a ): To qualify as a composition, an object and a part must have the following relationship:
+	The part (member) is part of the object (class)
+	The part (member) can only belong to one object (class) at a time
+	The part (member) has its existence managed by the object (class)
+	The part (member) does not know about the existence of the object (class)
+  Typically implemented using members of a class
+2)Aggregation( has-a ): To qualify as an aggregation, a whole object and its parts must have the following relationship:
+	The part (member) is part of the object (class)
+	The part (member) can belong to more than one object (class) at a time
+	The part (member) does not have its existence managed by the object (class)
+	The part (member) does not know about the existence of the object (class)
+  Typically implemented using pointers to an external object.
+3)Association( uses-a ):To qualify as an association, an object and another object must have the following relationship:
+	The associated object (member) is otherwise unrelated to the object (class)
+	The associated object (member) can belong to more than one object (class) at a time
+	The associated object (member) does not have its existence managed by the object (class)
+	The associated object (member) may or may not know about the existence of the object (class)
+  Also implemented using pointers.
+4)Inheritance( is-a )
+
+
+
+An important point to note is when should something be treated as a single class or multiple classes.
+All important entities should be represented as classes. In a class if there is cohesion, it should 
+remain as one class. By cohesion we mean that the class cannot be split into two or more sets of 
+variables and methods (other than constructor and destructor) such that each set is independent of the
+other. 

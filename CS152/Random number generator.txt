@@ -1,0 +1,19 @@
+A good random number generator must sattisfy the following properties:
+Consider a discrete random number generator that produces random integers in [0 , MAX_RAND]. The generator when run produces a fixed sequence of numbers r[1],r[2],...r[n].
+Then a good random number generator has the following features:
+1)Uniformity: The mean:
+			(r[1]+r[2]+...+r[n])/n = MAX_RAND/2 for n of sufficiently large n
+	      The variance:
+			(r[1]^2 + r[2]^2...r[n]^2)/n - ((r[1]+r[2]+...r[n])/n)^2 = MAX_RAND^2 / 12  for n of sufficiently large n
+	      Also, if [0 , MAX_RAND] is partitioned into k equal parts, then each part [(i-1)*MAX_RAND/k , i*MAX_RAND/k] must have a mean (i-0.5)*MAX_RAND/k and a variance
+	      (MAX_RAND/k)^2 / 12.
+2)Non-locality:For any set of m ( where m is of the order of 10 ) numbers a_1, a_2, ... a_m must obey approximately:
+	       The mean:
+			(r[a_1]+r[a_2]+...+r[a_m])/m = MAX_RAND/2 
+	      The variance:
+			(r[a_1]^2 + r[a_2]^2...r[a_m]^2)/m - ((r[a_1]+r[a_2]+...r[a_m])/m)^2 = MAX_RAND^2 / 12 
+	      These properties must be obeyed on an average and with a low variance over all sets of m numbers.
+3)Large Period: Pseudo random numbers tend to be periodic. A Pseudo random numbers having large period for all seed values is a good one.
+
+For C++ functions refer: https://www.learncpp.com/cpp-tutorial/random-number-generation/
+ 

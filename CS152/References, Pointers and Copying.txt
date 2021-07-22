@@ -1,0 +1,61 @@
+THE FOLLOWING SHOULD BE NOTED:
+The heap memory transcends all activation frames. It exists once created and after that will not be deleted
+as long as the delete command is not issued.
+For a non-heap variable having a pointer pointing to it, the variable can be addressed by the pointer from
+any activation frame as long as the variable is not destroyed by it going out of its scope.
+A non-heap array can be refered by a pointer as long as its activation frame is not destroyed. Note that the
+array pointer( const pointer) will be destroyed as soon as the scope ends, but the array elements are not
+destroyed as long as the activation frame is not destroyed.
+A reference must always be initialized; it cannot be simply declared. Also, the reference in some other activation
+frame remains valid as long as the variable to which it is refering to is not destroyed due to going out of scope.
+
+COPY CREATION:
+1)ASSIGNEMENT OPERATOR:
+C++ overloads the = operator by default. The operator is invoked when we assign using = . It is defined as:
+	A& operator=(A& a){
+		\\copies all member variables( all access specifiers) from a to the listener object.
+		return *this
+	}
+It also returns a reference to the listener object to allow chaining of calls. Also, the = operator has a 
+right to left associativity.
+	A a ;
+	A b ;
+	a=b ; //calls assignement operator
+2)COPY CONSTRUCTOR:
+Similarly C++ defines a copy constructor by default. It is defined as:
+	A(const A& a){
+		\\copies all member variables( all access specifiers) from a to the listener object.
+	}
+The reason behind the & is that, when passing by reference, the copy constructor is not called. 
+The reason for const is that when we have a temporary object created by the compiler as an output
+to some operation/ function, and it is copied into the initialization of some variable. But the 
+temporary object cannot bind to a non-const reference, because, it doesnot make sense to modify
+the temporary object.
+It is called when:
+	1) Constructing using object of the same type:
+		A a ;
+		A b = a;
+	   Note here that if we are initializing as above, then copy constructor is used. However, if the variable 
+	   b were initialized a priori, and then assigned as b=a , then assignement operator is called.
+	  
+	   The compiler sees this as:
+		A b(a) ;
+ 
+	2) Passing by value:
+		void f(A b){
+		}
+		A a ;
+		f(a);
+	   The copy constructor gets called
+	3) Returning from a function: The local variable inside the function being returned, gets copied to a variable in the activation frame to which it is being
+	   returned to. After this, if another variable is assigned this value, again, copy conctructor/ assignement operator will be called.
+		A f(){
+			A a ;
+			return a ;
+		}
+		A b;
+		b=f(); //copy constructor and assignement both called once each
+3)DEEP COPY: It may happen that the class has an array or a heap pointer. In that case the default copy constructor is going to make the pointers of both the objects
+	point to the same memory location. To avoid this, we override the copy constructor and make it copy the elements of the array/ the heap element to a new location.
+
+	   

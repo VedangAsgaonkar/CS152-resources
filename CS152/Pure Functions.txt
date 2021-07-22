@@ -1,0 +1,11 @@
+A function is said to be pure, if for a fixed input, it always produces a fixed output and does nothing more than that.
+This means:
+1)It cannot have an internal state. It cannot rely on static/global variables.
+2)It cannot change the environment. So it cannot alter static or global variables.
+
+SOME IMPORTANT EXAMPLES:
+1)Functions that alter streams are not pure. So if a function has cin or cout, it cannot be pure, since it is altering 
+  these streams
+2)Functions that take in arguments by reference are not pure if they alter states of variable outside their scope
+3)Functions that take in arguments by pointer are not pure as the same pointer may point to two distinct objects, so for
+  the same input i.e. pointer, output may be different.

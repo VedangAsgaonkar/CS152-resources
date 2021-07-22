@@ -1,0 +1,140 @@
+Prepocessors are pieces of code that are read before the compilation occurs. They are mainly of the following types:
+
+
+1)Macros: The are definitions that can be used throughout the code.  
+	Anywhere there is a macro in the code, it gets replaced by the corresponding definition.
+	Note that macro methods are not called like normal methods with activation frames etc. Their code is simply
+	replaced at the place where they are used. 
+	The syntax is a bit different. For example:
+		#define LIMIT 5
+		#define AREA(l,b) ( l*b )
+	Note here that l and b are not treated as variables, they are treated as tokens.
+  We can also assign macros using other macros. Like:
+		#define MYLIMIT LIMIT
+  To delete a defined macro we use #undef
+		#undef LIMIT
+
+
+  How Macros work:
+  The preprocessor replaces all occurances of the macro with its exact definition. The following examples are instructive:
+
+	1)Putting paranthesis: Consider the following macro intended to store the value 5
+		#define HI 2+3
+	  It is being used in some method as 
+		HI*6 ;
+	  Now the HI will be replaced by 2+3 , so the statement will become 2+3*6 which evaluates to 20, which is not what we
+	  wanted. So while defining, we may define as
+		#define HI (2+3)
+
+	2)Putting paranthesis: Consider the following macro:
+		#define MULTIPLY(x,y) (x*y)
+	  The paranthesis about x*y was put for the reason above.
+	  If it is used as 
+		MULTIPLY(2,3)
+	  It will simply replace the occurance with
+		(2*3)
+	  If it is used like 
+		MULTIPLY(2+3,4+5)
+	  It will replace the occurance with
+		(2+3*4+5)
+  	  Which is clearly not what we desired. We observe that macros use the tokens provided to them naively and directly treating
+          them just as if they are simply being replaced.
+	  So instead we write 
+		#define MULTIPLY(x,y) ((x)*(y))
+
+	3)Curly braces: If we want our macro to have multiple lines, we can write like:
+		#define SWAP(a,b) a=a+b; b=a-b; a=a-b;
+	  This can be used in code directly as
+		SWAP(x,y);
+	  Will be replaced by:
+		x=x+y; y=x-y; x=x-y;;
+	  Now be a problem in cases where for example a single statement is scope, like an if without curly braces.
+	  So it is suggested to use {} around the macro
+		#define SWAP(a,b) {a=a+b; b=a-b; a=a-b;}
+	  This will be replaced by
+		{x=x+y; y=x-y; x=x-y;};
+
+	4)Do-while: As is noticed above, an extra semicolon is present. This may be avoided by either not using a semicolon
+	  while using the macro, or doing the following:
+		#define SWAP(a,b) do{a=a+b; b=a-b; a=a-b;}while(false)
+	5)Multi-line macros: To tell the preprocessor to include the next line in a macro we use \	
+		#define SWAP(a, b)  {   \
+                        a ^= b;         \
+                        b ^= a;         \ 
+                        a ^= b;         \
+                    }
+  
+  Sometimes it is tedious to make large macros. So instead write a function that does most of the job. Write a call to it in the macro. This way when macro is used, it gets
+  replaced, and the function being global can be called there.
+
+  STANDARD PREDEFINED MACROS:
+	1)__LINE__ : It replaces itself with the current line number
+	2)__FILE__ : It replaces itself with a C style string containing the full file name starting from the home directory.
+	3)__DATE__ : Replaces itself with a C style string date on which the preprocessor is run
+	4)__TIME__ : Replaces itself with a C style string time at which the preprocessor is run
+
+  TOKENS INSIDE MACROS:
+	Macros donot understand variables, functions and other code units. For a macro, whatever follows it is to be pasted as
+	code in every place the macro occurs, with the parameter token names of macro replacing the relevant tokens in the code.
+	Thus in a macro you can have 
+		#define MYMACRO x=2;
+	Anywhere MYMACRO occurs, it is replaced by the statement x=2; where x may be whatever according to that scope.
+	We can also paste together tokens inside macros. To paste together the tokens we use ## between them.
+	For example there may be a long variable name ending with different numbers. For example we may have in some
+	code the following variables defined
+		mynamespace::myvariableabc
+		mynamespace::myvariabledef
+		mynamespace::myvariableghi
+	Now it is tedious to write these. So instead we simple make a macro
+		#define MYMAC(str) mynamespace::myvariable##str
+	So now we can put MYMAC(abc) in place of the first variable, MYMAC(def) in place of second etc.
+	We can also convert the token to string. This is done using a single # . For example:
+		#define MYMAC(str) std::cout << str+"hello" << endl ;
+	Now doing:
+		MYMAC(1)
+	will be replaced by
+		std::cout << "1"+"hello" << endl ;
+	Doing:
+		int a = 1 ;
+		MYMAC(a)
+	will be replaced by
+		std::cout << "a"+"hello" << endl ;
+	Doing:
+		MYMAC(x+y)
+	will be replaced by
+		std::cout << "x+y"+"hello" << endl;
+	The fact that tokens are what goes into macros, means that we can pass in virtually anything, it neednot be a variable name.
+
+
+2)File inclusion:
+	#include <file name> //includes a standard file
+	#include "file name" //includes user defined file
+  Note that if we are using methods defined inside another .cpp file, we need to declare( only write signatures ) the methods in our file. This task can be tedious
+  and so very often the declarations are all put inside a header file .h and included seperately.
+
+
+3)Conditional compilation: Blocks of code can be enclosed between and #ifdef and #endif. The code is executed only if a certain #define has been made. For example:
+	#ifdef LIMIT
+	//code that will run only if LIMIT macro is defined anywhere before the statement
+	#endif
+  Note here that LIMIT may be simply defined, without a value also like
+	#define LIMIT
+  Similarly a condition of not being defined can be made using #ifndef. You can also have a #elif and #else before the #endif
+  The define neednot be made explicitly during coding. It can also be passed during compilation as :
+	g++ -DLIMIT myProg.cpp
+
+	Uses of conditional compilation:
+	1)Debugging: Certain debugging code like cout statements can be enclosed in #ifdef SomeMacroName and #endif. Thus while debugging, code will be compiled as
+		g++  -DSomeMacroName myProg.cpp
+  	And while actually executing it can be compiled as g++ myProg.cpp.
+	Also all assert statements by default have a #ifndef NDEBUG and #endif. Thus passing -DNDEBUG will silence all asserts.
+	2)System dependent code: Certain code is system dependent like window creation. This can be conditionally compiled. Example:
+		g++ -DAPPLE myProg.cpp
+		g++ -DLINUX myProg.cpp
+	3)Carrying out different #include based on user's will
+	4)Header Guards: If a header gets included more than once, it leads to error. So we use error guards. Each time we include the header we do the following:
+		#ifndef _HEADERNAME_H
+		#define _HEADERNAME_H
+		#include<HEADER.h>
+		#endif
+  	Alternatively, the class may be defined there instead of the #include
