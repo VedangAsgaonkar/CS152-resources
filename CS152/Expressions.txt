@@ -106,7 +106,7 @@ Behaviour and implementation of some special operators:
 			//some code
 			free(p);
 		}
-	
+ 	This has advantages like defining custom initializations	
 
 Lvalue: an expression that can appear to the left of the assignement operator. It is capable of storing a value
 Rvalue: an expression that can appear to the right if the assignement operator. It is capable of returning a value
