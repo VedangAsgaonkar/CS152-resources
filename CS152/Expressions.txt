@@ -58,6 +58,14 @@ Overloading unary operators:
 		}
 	};
 2)Postfix:
+	class A{
+		public:
+		A operator-(int){
+			A a ;
+			//some code
+			return a ;
+		}
+	};
 
 
 Behaviour and implementation of some special operators:
@@ -74,6 +82,20 @@ Behaviour and implementation of some special operators:
 		When used as suffix, it means, first return, then increment. x++ can behave only as rval
 
 3) Function arguments ( , , ) operator: Generally arguments are read from right to left
+
+4) Type Cast operators: These can also be overloaded. We can also overload the operator for conversion to void*
+	Eg:
+		class money{
+			private:
+			int amount;
+			public:
+			operator int(){
+				return	amount;
+			}
+			operator void*(){
+				//return some pointer
+			}
+		};
 	
 
 Lvalue: an expression that can appear to the left of the assignement operator. It is capable of storing a value
