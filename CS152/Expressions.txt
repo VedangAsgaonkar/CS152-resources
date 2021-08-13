@@ -96,6 +96,16 @@ Behaviour and implementation of some special operators:
 				//return some pointer
 			}
 		};
+5) Miscellanous operators can also be overloaded. For example:
+		void* operator new(size_t size){
+			//some code
+			void* p = malloc(size);
+			return p;
+		}
+		void operator delete(void* p){
+			//some code
+			free(p);
+		}
 	
 
 Lvalue: an expression that can appear to the left of the assignement operator. It is capable of storing a value
