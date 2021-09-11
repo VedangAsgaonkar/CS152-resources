@@ -47,6 +47,21 @@ int + int => int
 float + int => float
 etc.
 
+We can also overload operators outside the class like 
+
+ostream& operator<<(const ostream& os, const vec3& v){
+	os << v.e[0] << " " << v.e[1] << " " << v.e[2];
+	return os;
+}
+
+istream& operator<<(const istream& is, const vec3& v){
+	is >> v.e[0] >> v.e[1] >> v.e[2];
+	return os;
+}
+
+We generally do this when our user-defined class like vec3 here is supposed to come
+after the operator.
+
 Overloading unary operators:
 1)Prefix:
 	class A{
@@ -107,6 +122,16 @@ Behaviour and implementation of some special operators:
 			free(p);
 		}
  	This has advantages like defining custom initializations	
+
+6) Indexing operator [] can also be overloaded. For example:
+	class String{
+		private:
+			char* str;
+		public:
+			char& operator[](int i){
+				return str[i];
+			}
+	};
 
 Lvalue: an expression that can appear to the left of the assignement operator. It is capable of storing a value
 Rvalue: an expression that can appear to the right if the assignement operator. It is capable of returning a value
