@@ -1,0 +1,18 @@
+Given a data-type of the std template library, we can perform member based iterations on it, as follows:
+
+//let the datatype object be v
+
+for(auto& u : v){
+  // process u
+}
+
+Note that we are making a reference here. Doing for(auto u : v) will cause the members to get copied 
+and so any changes made to them will not affect the original data structure
+
+We may also have to use the form 
+
+for(const auto& u : v){
+
+}
+
+in cases where the v may be a temporary object.
