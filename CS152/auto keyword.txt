@@ -1,0 +1,16 @@
+The auto keyword stands a substitute to a type-name. We expect C++ to fill in the type-name
+on its own. Typical use cases of auto:
+1) When the typename is too large. We may also use a typedef in this case
+2) In iterators: Eg:
+    std::unordered_map<std::string , int> m ;
+    for( std::unordered_map<std::string , int>::iterator i = m.begin() ; i != m.end() ; i++){}
+    
+   can be abreviated to
+    for( auto i = m.begin() ; i != m.end() ; i++){}
+ 3) In member based iterations: for(auto & u : v). Here it is important to remember what is the actual
+    type of the member
+ 4) With templates: It may happen that we do not know a priori the type of a particular variable. For 
+    example we have a template class DataStructure that can take in a number of classes all of which
+    have a root member variable. The type of root may be different for these classes. Then it is best 
+    to have an auto variable to deal with this root in the template class
+ 
