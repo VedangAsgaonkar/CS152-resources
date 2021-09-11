@@ -1,0 +1,43 @@
+CONST VARIABLE
+A variable declared const cannot change in its lifetime
+const int x = 1;
+
+CONST POINTERS
+We take note of the following (basically read the type name left to right):
+const int *  means pointer to a constant integer
+int const * means poinyer to a constant integer
+int * const means a constant pointer to an integer
+const int * const means a constant pointer to a constant integer
+
+Note that the creation of an array in the stack like
+int arr[2];
+makes arr a int * const
+
+Also, there is an implicit conversion between const and non-const variables of a type,
+but to convert between pointers to const and non-const variables we need explicit casting
+
+CONST REFERENCES
+
+int x = 1;
+const int & y = x;
+
+This means that although we can alter x, we cannot alter it through reference(alias) y
+So x++ is permitted, y++ is not.
+
+CONST FUNCTIONS
+A function is declared const like:
+int f() const;
+We can have const functions only in classes. A const function is a promise that we will not alter 
+the member variables in the function.
+
+We can override this rule by declaring the member variable mutable, like
+mutable int y;
+This allows us to alter the variable even in a const function
+
+
+CONST OBJECTS
+We cannot alter the member variables of a const object. This also means that we can only call functions
+that are declared const on this object.
+
+Temporary objects created as a result of the return value of a function are always const, and so if we call
+a function on them the function must be const.
