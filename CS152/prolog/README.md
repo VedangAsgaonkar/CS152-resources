@@ -1,1 +1,1 @@
-Thus document stores some prolog programs made during the course.
+This folder stores some prolog programs made during the course.
