@@ -1,2 +1,0 @@
-We used open() to open the specified file. Then it was split into lines and a dictionary of all occuring words was made, with each
-word mapped to its frequency of occurence.

@@ -1,4 +1,0 @@
-C++ : 
-It is object oriented. We make use of classes, access specifiers and objects.
-C : 
-It is procedural. There are no classes.
